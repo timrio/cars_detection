@@ -1,0 +1,7 @@
+venv/
+*.zip
+*.csv
+data/
+train/
+test/
+.ipynb_checkpoints/
