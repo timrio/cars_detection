@@ -14,6 +14,7 @@ def read_frame(df_train, frame):
     return imread(file_path)
 
 
-def read_test_frame(df_test,frame):
+def read_test_frame(frame):
     """Read frames and create integer frame_id-s"""
-    return imread(os.path.join('./test/', format_id(frame)+'.jpg'))
+    format_id = f"{frame:03d}"
+    return imread(os.path.join('./test/', format_id+'.jpg'))

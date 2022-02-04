@@ -92,7 +92,7 @@ def sampling(df_ground_truth):
     total_negative_samples = []
     for frame_id in tqdm(range(1,df_ground_truth.shape[0]), position = 0):
         positive_samples, positive_bbs, img = get_positive_sample_and_image(frame_id, df_ground_truth)
-        negative_samples, negative_bbs = get_negative_sample(img, positive_bbs, len(positive_bbs)+20)
+        negative_samples, negative_bbs = get_negative_sample(img, positive_bbs, 2*len(positive_bbs))
         for img in positive_samples:
             total_positive_samples.append(cv2.resize(img, (64,64)))
         for img in negative_samples:
