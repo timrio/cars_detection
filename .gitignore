@@ -6,3 +6,5 @@ train/
 test/
 .ipynb_checkpoints/
 src/dist/
+non-vehicles/
+vehicles/

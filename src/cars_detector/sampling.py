@@ -2,6 +2,8 @@ import numpy as np
 from cars_detector.utils import read_frame
 from tqdm import tqdm
 import cv2
+from skimage.io import imread
+import os
 import random
 
 
@@ -23,7 +25,7 @@ def pyramid(image, scale=1.5, minSize=(128, 128)):
 
 
 
-def sampling(df_ground_truth, minSize=(100, 100), scale_step = 1.5):
+def sampling_box_images(df_ground_truth, minSize=(64, 64), scale_step = 1.5):
     total_positive_samples = []
     total_negative_samples = []
     i = 0
@@ -42,7 +44,7 @@ def sampling(df_ground_truth, minSize=(100, 100), scale_step = 1.5):
             window = minSize[0]
             x_size = test_img.shape[1]
             y_size = test_img.shape[0]
-            step = 35
+            step = 40
 
             new_bbs = np.int32(np.array(bbs)/scale)
 
@@ -62,8 +64,64 @@ def sampling(df_ground_truth, minSize=(100, 100), scale_step = 1.5):
                         masked_crop = mask_img[ytop:ytop+window,xleft:xleft+window]
                         masked_crop_size = len(masked_crop.ravel())
                         if masked_crop_size>0:
-                            if np.sum(masked_crop)/(masked_crop_size) > 0.9:
+                            if np.sum(masked_crop)/(masked_crop_size) > 0.5:
                                 total_positive_samples.append(crop)
-                            else:
+                            elif np.sum(masked_crop)/(masked_crop_size) < 0.05:
                                 total_negative_samples.append(crop)
+                            else:
+                                continue
     return(total_positive_samples, total_negative_samples)
+
+
+def get_vehicles_extra_images():
+    positive_samples = []
+    folders_list = os.listdir('vehicles/')
+    for folder in folders_list:
+        if folder != '.DS_Store':
+            image_list = os.listdir('vehicles/'+folder)
+            for image in image_list:
+                try:
+                    img = imread('vehicles/'+folder+'/'+image)
+                    if img.shape[0] != 64 and img.shape[1] != 64:
+                        img = cv2.reshape(img, (64,64,3))
+                except:
+                    continue
+                positive_samples.append(img)
+    return(positive_samples)
+
+def get_non_vehicles_extra_images():
+    negative_samples = []
+    folders_list = os.listdir('non-vehicles/')
+    for folder in folders_list:
+        if folder != '.DS_Store':
+            image_list = os.listdir('non-vehicles/'+folder)
+            for image in image_list:
+                try:
+                    img = imread('non-vehicles/'+folder+'/'+image)
+                    if img.shape[0] != 64 and img.shape[1] != 64:
+                        img = cv2.reshape(img, (64,64,3))
+                except:
+                    continue
+                negative_samples.append(img)
+    return(negative_samples)
+
+
+def sampling(df_ground_truth):
+    total_positive_samples, total_negative_samples = sampling_box_images(df_ground_truth)
+
+    extra_positive_samples = get_vehicles_extra_images()
+    extra_negative_samples = get_non_vehicles_extra_images()
+
+    n_extra_pos = len(extra_positive_samples)
+    n_extra_neg = len(extra_negative_samples)
+
+    total_negative_samples = random.sample(total_negative_samples, 4*n_extra_neg)
+    total_positive_samples = random.sample(total_positive_samples, 2*n_extra_pos)
+
+    total_positive_samples.extend(extra_positive_samples)
+    total_negative_samples.extend(extra_negative_samples)
+    return(total_positive_samples, total_negative_samples)
+
+
+
+    
