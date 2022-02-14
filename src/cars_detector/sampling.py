@@ -113,8 +113,8 @@ def sampling(df_ground_truth):
     extra_negative_samples = get_non_vehicles_extra_images()
 
 
-    total_negative_samples = random.sample(total_negative_samples, 10000)
-    total_positive_samples = random.sample(total_positive_samples, 2000)
+    total_negative_samples = random.sample(total_negative_samples, 15000)
+    total_positive_samples = random.sample(total_positive_samples, 8000)
 
     total_positive_samples.extend(extra_positive_samples)
     total_negative_samples.extend(extra_negative_samples)
