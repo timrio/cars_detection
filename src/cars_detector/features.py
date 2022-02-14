@@ -2,17 +2,20 @@ from skimage import exposure
 from skimage import feature
 from tqdm import tqdm
 import numpy as np
+import cv2
 
 def compute_hogs_features(img):
-    H1 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(8,8), cells_per_block=(2, 2))
-    H2 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(8,8), cells_per_block=(2, 2))
-    H3 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(8,8), cells_per_block=(2, 2))
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2YUV)
+    H1 = feature.hog(img[:,:,1], orientations=11, pixels_per_cell=(16,16), cells_per_block=(2, 2))
+    H2 = feature.hog(img[:,:,1], orientations=11, pixels_per_cell=(16,16), cells_per_block=(2, 2))
+    H3 = feature.hog(img[:,:,1], orientations=11, pixels_per_cell=(16,16), cells_per_block=(2, 2))
     hog_features = np.hstack((H1,H2,H3))
     return(hog_features)
 
 
 def compute_colors_features(img, nbins=32):   
     # Compute the histogram of the color channels separately
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2YUV)
     channel1_hist = np.histogram(img[:,:,0], bins=nbins)
     channel2_hist = np.histogram(img[:,:,1], bins=nbins)
     channel3_hist = np.histogram(img[:,:,2], bins=nbins)

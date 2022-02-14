@@ -106,11 +106,10 @@ def get_non_vehicles_extra_images():
     return(negative_samples)
 
 
-def sampling(df_ground_truth):
-    total_positive_samples, total_negative_samples = sampling_box_images(df_ground_truth)
-
+def sampling():
     extra_positive_samples = get_vehicles_extra_images()
     extra_negative_samples = get_non_vehicles_extra_images()
+<<<<<<< Updated upstream
 
 
     total_negative_samples = random.sample(total_negative_samples, 15000)
@@ -119,6 +118,9 @@ def sampling(df_ground_truth):
     total_positive_samples.extend(extra_positive_samples)
     total_negative_samples.extend(extra_negative_samples)
     return(total_positive_samples, total_negative_samples)
+=======
+    return(extra_positive_samples, extra_negative_samples)
+>>>>>>> Stashed changes
 
 
 
