@@ -37,17 +37,13 @@ def sampling_box_images(df_ground_truth, minSize=(64, 64), scale_step = 1.5):
         except:
             bbs = np.array([])
         img = read_frame(df_ground_truth, frame_id)
-
         for i,test_img in enumerate(pyramid(img, scale=scale_step, minSize=minSize)):
-            
             scale = scale_step**i
             window = minSize[0]
             x_size = test_img.shape[1]
             y_size = test_img.shape[0]
-            step = 40
-
+            step = np.int32(40/scale)
             new_bbs = np.int32(np.array(bbs)/scale)
-
             mask_img = np.zeros((test_img.shape[0], test_img.shape[1]))
             for box in new_bbs:
                 mask_img[box[1]:box[1]+box[3], box[0]:box[0]+box[2]] = 1
@@ -71,7 +67,6 @@ def sampling_box_images(df_ground_truth, minSize=(64, 64), scale_step = 1.5):
                             else:
                                 continue
     return(total_positive_samples, total_negative_samples)
-
 
 def get_vehicles_extra_images():
     positive_samples = []
@@ -106,16 +101,20 @@ def get_non_vehicles_extra_images():
     return(negative_samples)
 
 
-def sampling():
+def sampling(df_ground_truth):
+    total_positive_samples, total_negative_samples = sampling_box_images(df_ground_truth, minSize=(64, 64), scale_step = 1.5)
+
     extra_positive_samples = get_vehicles_extra_images()
     extra_negative_samples = get_non_vehicles_extra_images()
 
-
-    total_negative_samples = random.sample(total_negative_samples, 10000)
-    total_positive_samples = random.sample(total_positive_samples, 2000)
+    total_negative_samples = random.sample(total_negative_samples, 15000)
+    total_positive_samples = random.sample(total_positive_samples, 8000)
 
     total_positive_samples.extend(extra_positive_samples)
     total_negative_samples.extend(extra_negative_samples)
+
     return(total_positive_samples, total_negative_samples)
+
+
 
     
