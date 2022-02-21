@@ -102,18 +102,19 @@ def get_non_vehicles_extra_images():
 
 
 def sampling(df_ground_truth):
-    total_positive_samples, total_negative_samples = sampling_box_images(df_ground_truth, minSize=(64, 64), scale_step = 1.5)
+    #total_positive_samples, total_negative_samples = sampling_box_images(df_ground_truth, minSize=(64, 64), scale_step = 1.5)
 
     extra_positive_samples = get_vehicles_extra_images()
     extra_negative_samples = get_non_vehicles_extra_images()
 
-    total_negative_samples = random.sample(total_negative_samples, 15000)
-    total_positive_samples = random.sample(total_positive_samples, 8000)
+    #total_negative_samples = random.sample(total_negative_samples, 15000)
+    #total_positive_samples = random.sample(total_positive_samples, 2000)
 
-    total_positive_samples.extend(extra_positive_samples)
-    total_negative_samples.extend(extra_negative_samples)
+    #total_positive_samples.extend(extra_positive_samples)
+    #total_negative_samples.extend(extra_negative_samples)
 
-    return(total_positive_samples, total_negative_samples)
+    return(extra_positive_samples, extra_negative_samples)
+    
 
 
 

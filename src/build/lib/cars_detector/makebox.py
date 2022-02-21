@@ -1,45 +1,51 @@
 import numpy as np
 import cv2
 
-def non_max_suppression(boxes, overlapThresh = 0.4):
-    # Return an empty list, if no boxes given
-    if len(boxes) == 0:
-        return []
-    x1 = boxes[:, 0]  # x coordinate of the top-left corner
-    y1 = boxes[:, 1]  # y coordinate of the top-left corner
-    x2 = x1+boxes[:, 2]  # x coordinate of the bottom-right corner
-    y2 = y1+boxes[:, 3]  # y coordinate of the bottom-right corner
-    # Compute the area of the bounding boxes and sort the bounding
-    # Boxes by the bottom-right y-coordinate of the bounding box
-    areas = (x2 - x1 + 1) * (y2 - y1 + 1) # We add 1, because the pixel at the start as well as at the end counts
-    # The indices of all boxes at start. We will redundant indices one by one.
-    indices = np.arange(len(x1))
-    for i,box in enumerate(boxes):
-        # Create temporary indices  
-        temp_indices = indices[indices!=i]
-        # Find out the coordinates of the intersection box
-        xx1 = np.maximum(box[0], boxes[temp_indices,0])
-        yy1 = np.maximum(box[1], boxes[temp_indices,1])
-        xx2 = np.minimum(box[0]+box[2], boxes[temp_indices,0]+boxes[temp_indices,2])
-        yy2 = np.minimum(box[1]+box[3], boxes[temp_indices,1]+boxes[temp_indices,3])
-        # Find out the width and the height of the intersection box
-        w = np.maximum(0, xx2 - xx1 + 1)
-        h = np.maximum(0, yy2 - yy1 + 1)
-        # compute the ratio of overlap
-        overlap = (w * h) / areas[temp_indices]
-        # if the actual boungding box has an overlap bigger than treshold with any other box, remove it's index  
-        if np.any(overlap) > overlapThresh:
-            indices = indices[indices != i]
-    #return only the boxes at the remaining indices
-
-    boxes = boxes[indices].astype(int)
-    new_boxes = []
-    for box in boxes:
-        dx = box[2]
-        dy = box[3]
-        if (dx/dy < 3 or dx/dy > 0.3):
-            new_boxes.append(box)
-    return new_boxes
+def non_max_suppression(boxes, overlapThresh):
+	# if there are no boxes, return an empty list
+	if len(boxes) == 0:
+		return []
+	# if the bounding boxes integers, convert them to floats --
+	# this is important since we'll be doing a bunch of divisions
+	if boxes.dtype.kind == "i":
+		boxes = boxes.astype("float")
+	# initialize the list of picked indexes	
+	pick = []
+	# grab the coordinates of the bounding boxes
+	x1 = boxes[:,1]
+	y1 = boxes[:,0]
+	x2 = boxes[:,3]+x1
+	y2 = boxes[:,2]+y1
+	# compute the area of the bounding boxes and sort the bounding
+	# boxes by the bottom-right y-coordinate of the bounding box
+	area = (x2 - x1 + 1) * (y2 - y1 + 1)
+	idxs = np.argsort(y2)
+	# keep looping while some indexes still remain in the indexes
+	# list
+	while len(idxs) > 0:
+		# grab the last index in the indexes list and add the
+		# index value to the list of picked indexes
+		last = len(idxs) - 1
+		i = idxs[last]
+		pick.append(i)
+		# find the largest (x, y) coordinates for the start of
+		# the bounding box and the smallest (x, y) coordinates
+		# for the end of the bounding box
+		xx1 = np.maximum(x1[i], x1[idxs[:last]])
+		yy1 = np.maximum(y1[i], y1[idxs[:last]])
+		xx2 = np.minimum(x2[i], x2[idxs[:last]])
+		yy2 = np.minimum(y2[i], y2[idxs[:last]])
+		# compute the width and height of the bounding box
+		w = np.maximum(0, xx2 - xx1 + 1)
+		h = np.maximum(0, yy2 - yy1 + 1)
+		# compute the ratio of overlap
+		overlap = (w * h) / area[idxs[:last]]
+		# delete all indexes from the index list that have
+		idxs = np.delete(idxs, np.concatenate(([last],
+			np.where(overlap > overlapThresh)[0])))
+	# return only the bounding boxes that were picked using the
+	# integer data type
+	return boxes[pick].astype("int")
 
 
 def box_otsu(pred_array):
