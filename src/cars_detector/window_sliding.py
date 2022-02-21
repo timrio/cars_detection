@@ -7,8 +7,8 @@ def first_window_sliding(img, clf, scaler):
     # List of bounding box positions
     boxes_list = []
     pred_array = np.zeros((img.shape[0], img.shape[1]))
-    ystart_ystop_scale = [(200, 450, 0.5), (200, 450, 1),(200, 450, 2),(200, 450, 4)]
-    step = 64
+    ystart_ystop_scale = [(200, 450, 0.5),(200, 450, 1),(200, 450, 2),(200, 450, 3)]
+    step = 40
     proba = 0.1 # we want a high recall with this first classifier
     # Searching different size windows at different scales:
     for (ystart, ystop, scale) in ystart_ystop_scale:
@@ -52,9 +52,9 @@ def first_window_sliding(img, clf, scaler):
 def window_sliding_advanced(img, boxes_list, clf, scaler):
     # List of bounding box positions
     pred_array = np.zeros((img.shape[0], img.shape[1]))
-    scales = [0.5,0.7,1, 1.3,1.5,2,3]
-    step = 10
-    proba = 0.99 # we want a very good precision this time
+    scales = [0.5,1,1.5,2,3]
+    step = 20
+    proba = 0.7 # we want a very good precision this time
     new_boxes = []
     for box in boxes_list:
         xstart, xstop = max(0,box[0]-32),min(box[0]+box[2]+32,img.shape[0]) # we add a small offset to look further
