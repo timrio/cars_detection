@@ -30,12 +30,26 @@ class Transfo:
     def blur(self):
         blured_img = 255*gaussian(self.img, 1)
         self.img = blured_img.astype(np.uint8)
+
+    def random_crop(self,crop_width = 40 ,crop_height = 40):
+        max_x = self.img.shape[1] - crop_width
+        max_y = self.img.shape[1] - crop_height
+
+        x = np.random.randint(0, max_x)
+        y = np.random.randint(0, max_y)
+
+        crop = self.img[y: y + crop_height, x: x + crop_width]
+        crop = cv2.resize(crop, (64,64))
+        self.img = crop
+
+
+
         
 
 def random_augmentation(img):
     new_img = Transfo(img)
     number_of_transfo = np.random.randint(1,3)
-    transfo_list = [new_img.increase_brightess, new_img.blur, new_img.distort, new_img.add_noise]
+    transfo_list = [new_img.increase_brightess, new_img.blur, new_img.distort, new_img.add_noise, new_img.random_crop]
     transfo_to_apply = np.random.choice(transfo_list,number_of_transfo,replace=False)
     for transfo in transfo_to_apply:
         transfo()
