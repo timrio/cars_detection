@@ -6,6 +6,7 @@ cars_detector/features.py
 cars_detector/hard_negative_sampling.py
 cars_detector/makebox.py
 cars_detector/sampling.py
+cars_detector/tracking.py
 cars_detector/utils.py
 cars_detector/window_sliding.py
 cars_detector.egg-info/PKG-INFO
