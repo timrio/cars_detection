@@ -4,9 +4,9 @@ from tqdm import tqdm
 import numpy as np
 
 def compute_hogs_features(img):
-    H1 = feature.hog(img[:,:,1], orientations=11, pixels_per_cell=(8,8), cells_per_block=(2, 2))
-    H2 = feature.hog(img[:,:,1], orientations=11, pixels_per_cell=(8,8), cells_per_block=(2, 2))
-    H3 = feature.hog(img[:,:,1], orientations=11, pixels_per_cell=(8,8), cells_per_block=(2, 2))
+    H1 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(16,16), cells_per_block=(3, 3))
+    H2 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(16,16), cells_per_block=(3, 3))
+    H3 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(16,16), cells_per_block=(3, 3))
     hog_features = np.hstack((H1,H2,H3))
     return(hog_features)
 

@@ -26,7 +26,7 @@ def hard_negative_sampling(df_ground_truth, clf, scaler):
                     features = compute_features(crop)
                     features = scaler.transform([features])
                     proba = clf.predict_proba(features)[0][1]
-                    if proba >= 0.7: # ...but if the classifier truly thinks there is a car
+                    if proba >= 0.8: # ...but if the classifier truly thinks there is a car
                         hard_negative_samples.append(crop)
                 else:
                     continue
