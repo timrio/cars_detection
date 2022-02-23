@@ -1,0 +1,14 @@
+setup.py
+cars_detector/__init__.py
+cars_detector/augmentation.py
+cars_detector/encoding.py
+cars_detector/features.py
+cars_detector/hard_negative_sampling.py
+cars_detector/makebox.py
+cars_detector/sampling.py
+cars_detector/utils.py
+cars_detector/window_sliding.py
+cars_detector.egg-info/PKG-INFO
+cars_detector.egg-info/SOURCES.txt
+cars_detector.egg-info/dependency_links.txt
+cars_detector.egg-info/top_level.txt
