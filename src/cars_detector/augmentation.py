@@ -3,6 +3,9 @@ import numpy as np
 import cv2
 
 class Transfo:
+    """
+    implement augmentations on images
+    """
     def __init__(self, img):
         self.img = img.astype(np.uint8)
 
@@ -47,6 +50,9 @@ class Transfo:
         
 
 def random_augmentation(img):
+    """
+    implement a random number of transformation on images
+    """
     new_img = Transfo(img)
     number_of_transfo = np.random.randint(1,3)
     transfo_list = [new_img.increase_brightess, new_img.blur, new_img.distort, new_img.add_noise, new_img.random_crop]

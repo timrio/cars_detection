@@ -4,7 +4,10 @@ import pandas as pd
 
 
 def tracking(image_index, mask_dict, boxes_array, search_radius = 1, number_of_frames_to_look = 15, freq_of_presence = 0.6):
-
+    '''
+    implement pseudo tracking to remove false positive examples
+    if a box is not present enough close to the studied box in the past frames we consider it as a false negative example
+    '''
     boxes_to_keep = []
     boxes = boxes_array.query('image==@image_index').boxes.values[0]
 
@@ -20,12 +23,12 @@ def tracking(image_index, mask_dict, boxes_array, search_radius = 1, number_of_f
             crop = mask_future[y_min:y_max,x_min:x_max]
             if box[0] < 300 and box[1] < 300: # nothing should be in this area
                 continue
-            if np.sum(crop) < 1000: # almost nothing has been found
+            if np.sum(crop) < 1000: # almost no other box has been found in past frames
                 continue
             else:
                 count += 1
 
-            if count >= min_number_of_presence: # if the box has been found on a sufficient amount of frames
+            if count >= min_number_of_presence: # if the box has been found in a sufficient amount of past frames
                 boxes_to_keep.append(box)
                 break
 

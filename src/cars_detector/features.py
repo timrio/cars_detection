@@ -4,6 +4,9 @@ from tqdm import tqdm
 import numpy as np
 
 def compute_hogs_features(img):
+    """
+    compute HoGs on the three channels
+    """
     H1 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(16,16), cells_per_block=(3, 3))
     H2 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(16,16), cells_per_block=(3, 3))
     H3 = feature.hog(img[:,:,1], orientations=9, pixels_per_cell=(16,16), cells_per_block=(3, 3))
@@ -12,7 +15,9 @@ def compute_hogs_features(img):
 
 
 def compute_colors_features(img, nbins=32):   
-    # Compute the histogram of the color channels separately
+    """
+    Compute the histogram of the color channels separately
+    """
     channel1_hist = np.histogram(img[:,:,0], bins=nbins)
     channel2_hist = np.histogram(img[:,:,1], bins=nbins)
     channel3_hist = np.histogram(img[:,:,2], bins=nbins)
@@ -22,6 +27,9 @@ def compute_colors_features(img, nbins=32):
 
 
 def compute_features(img):
+    """
+    compute image features
+    """
     hogs_features = compute_hogs_features(img)
     color_features = compute_colors_features(img)
     features = np.concatenate((hogs_features, color_features))

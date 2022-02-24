@@ -7,6 +7,10 @@ from cars_detector.features import compute_features
 
 
 def hard_negative_sampling(df_ground_truth, clf, scaler):
+    """
+    keep sample of images where the model is confident that a car is present 
+    but no car is to be found on the sample
+    """
     hard_negative_samples = []
     for frame_id in tqdm(range(1,df_ground_truth.shape[0]), position = 0):
         try:

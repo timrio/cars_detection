@@ -4,10 +4,12 @@ from tqdm import tqdm
 import cv2
 from skimage.io import imread
 import os
-import random
 
 
 def positive_sampling(df_ground_truth):
+    """
+    retrieve positives examples from the training video
+    """
     positive_samples = []
     for frame_id in tqdm(range(1,df_ground_truth.shape[0]), position = 0):
         try:
@@ -26,6 +28,9 @@ def positive_sampling(df_ground_truth):
 
 
 def negative_sampling(df_ground_truth):
+    """
+    retrieve negative examples from the training video
+    """
     negative_samples = []
     for frame_id in tqdm(range(1,df_ground_truth.shape[0]), position = 0):
         try:
@@ -50,6 +55,9 @@ def negative_sampling(df_ground_truth):
 
 
 def get_vehicles_extra_images():
+    '''
+    add optional additional positive examples if provided
+    '''
     positive_samples = []
     folders_list = os.listdir('vehicles/')
     for folder in folders_list:
@@ -66,6 +74,9 @@ def get_vehicles_extra_images():
     return(positive_samples)
 
 def get_non_vehicles_extra_images():
+    '''
+    add optional additional positive examples if provided
+    '''
     negative_samples = []
     folders_list = os.listdir('non-vehicles/')
     for folder in folders_list:
@@ -83,6 +94,9 @@ def get_non_vehicles_extra_images():
 
 
 def sampling(df_ground_truth):
+    """
+    compute training samples
+    """
     total_positive_samples = positive_sampling(df_ground_truth)
     total_negative_samples = negative_sampling(df_ground_truth)
 

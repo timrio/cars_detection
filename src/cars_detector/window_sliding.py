@@ -2,8 +2,12 @@ import numpy as np
 import cv2
 from cars_detector.features import compute_features
 
-# Extracts features using hog sub-sampling and make predictions
+
 def first_window_sliding(img, clf, scaler):
+    """
+    impement a first window sliding to generate region of interest proposals
+    high recall, low precision
+    """
     # List of bounding box positions
     boxes_list = []
     pred_array = np.zeros((img.shape[0], img.shape[1]))
@@ -54,6 +58,10 @@ def first_window_sliding(img, clf, scaler):
 
 
 def window_sliding_advanced(img, boxes_list, clf, scaler):
+    """
+    implement a second an accurate window sliding on the previously sampled regions of interests
+    high precision
+    """
     # List of bounding box positions
     pred_array = np.zeros((img.shape[0], img.shape[1]))
     scales = [0.7,1,2,2.5,3,4,5]
