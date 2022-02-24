@@ -6,7 +6,7 @@ import pandas as pd
 def tracking(image_index, mask_dict, boxes_array, search_radius = 1, number_of_frames_to_look = 15, freq_of_presence = 0.6):
 
     boxes_to_keep = []
-    boxes = boxes_array.query('image==@i').boxes.values[0]
+    boxes = boxes_array.query('image==@image_index').boxes.values[0]
 
     for box in boxes:
         count = 0
